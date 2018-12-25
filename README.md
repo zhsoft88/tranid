@@ -13,7 +13,7 @@ $ [sudo] npm install -g tranid
 
 ```
 Usage:
-  tranid [OPTIONS] grd_or_grdp_file [message_name...]
+  tranid [OPTIONS] grd_or_grdp_file [message_name... or translation_id...]
 
 Options:
   -h, --help: Help
@@ -21,7 +21,9 @@ Options:
 
 Arguments:
   grd_or_grdp_file: grd file or grdp file or - (stands for STDIN)
-  message_name...: zero or more message names
+  message_name...: zero or more message names (for generating translation ids)
+  or
+  translation_id...: zero or more translation ids (for finding corresponding message names)
 ```
 
 * Generating translation id for used in xtb files:
@@ -49,6 +51,16 @@ Arguments:
 
   Note: for convenience, tranid also search included grdp files.
 
+* Given translation id, find corresponding message names:
+
+  ```sh
+  $ tranid chromium_strings.grd 7337881442233988129
+  IDS_PRODUCT_NAME 7337881442233988129
+  IDS_SHORT_PRODUCT_NAME 7337881442233988129
+  IDS_ACCNAME_APP 7337881442233988129
+  ......
+  ```
+
 
 ### <abbr title="As Nodejs Module Interface">As Nodejs Module</abbr>
 
@@ -60,7 +72,7 @@ FS.readFile('generated_resources.grd', 'utf8', function(err, data) {
   if (err)
     throw err
 
-  // usage: tranid(grd_content, message_names)
+  // usage: tranid(grd_content, message_names or translation_ids)
   const [list, parts] = tranid(data, ['IDS_PRODUCT_NAME', 'IDS_TASK_MANAGER_TITLE'])
   for (const [name, tid] of list) {
     console.log(`${name} ${tid}`)
